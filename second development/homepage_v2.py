@@ -30,6 +30,9 @@ def add_diary():
     frame will pop up'''
 
     def submit_diary():
+        '''Def to save the diary in the dictionary, then
+        alllowing the '''
+
         title = title_entry.get().strip()
         description = description_entry.get().strip()
 
@@ -83,7 +86,8 @@ def add_diary():
     submit_button.place(relx=0.42, rely=0.65)
 
 def update_sidebar():
-    '''This function will be used to update'''
+    '''This function will be used to update the sidebar
+    by adding the new diary names to the side bar.'''
 
     for btn in sidebar_buttons:
         btn.destroy()
@@ -126,7 +130,9 @@ def topbar():
     icon_label.place(relx=0, rely=0, relwidth=0.1, relheight=1)
 
 def mainframe():
+
     '''Main content area of the homepage.'''
+
     main_frame = Frame(root, bg="#fffef8")
     main_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
 
