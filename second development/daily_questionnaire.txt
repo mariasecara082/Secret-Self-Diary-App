@@ -1,0 +1,20 @@
+['Peaceful']
+Highlight: 
+Highlight: m
+Day rating: 6/10
+['Disappointed']
+Highlight: sss
+Day rating: 4/10
+['Peaceful']
+Highlight: n
+Day rating: 4/10
+['Peaceful']
+Highlight: 2
+Day rating: 2/10
+['Lonely']
+Highlight: n
+['Gratefull']
+Highlight: a
+['Lonely']
+Highlight: s
+Day rating: 8/10
