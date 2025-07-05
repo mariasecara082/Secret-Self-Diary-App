@@ -1,48 +1,34 @@
-'''This will be used as the homepage.
-All functions coded will be put here (GUI and backend Python)'''
-
 from tkinter import *
 import tkinter as tk
-from PIL import Image, ImageTk
-import tkinter as tk
 from tkinter import filedialog
+from PIL import Image, ImageTk
 
-#------------ [STORAGE] ------------
+#Storage.
 '''Here is where the data from the "save new diary" will be saved'''
-diaries = []  #Stores newly made diaries as dictionaries.
-sidebar_buttons = []  #Stores as sidebar buttons.
-trial_diary_frame = None
+diaries = []  #Diaries get stored as a dictionary
+sidebar_buttons = []  #Buttons that link to new diaries
+current_diary_frame = None  #Shows which diary is currently open
 
-
-
-#Define root.
-root = tk.Tk()
-root.title("Trial for Homepage")
-root.geometry("1400x900")
-root.configure(bg="#fffef8")  #Making background color.
+#Functions.
 
 def add_diary():
-
-
     '''Creating this function
     as a way to create the frame that when the
     button for adding a new diary is clicked, this
-    frame will pop up'''
+    frame will pop up''' 
 
     def submit_diary():
         '''Def to save the diary in the dictionary, then
         allowing the user to access it through the
         sidebar.'''
-
         title = title_entry.get()
         description = description_entry.get("1.0", "end-1c")
         image_path = image_path_var.get()
 
         if not title:
-            return  #Warning user about the empty title
+            return  #Add warning for empty title
 
-        #Save diary data.
-        image_path = image_path_var.get()
+        # Save diary data
         diary_data = {
             "title": title,
             "description": description,
@@ -50,16 +36,13 @@ def add_diary():
         }
         diaries.append(diary_data)
         update_sidebar()
-        open_diary(len(diaries) - 1)
         new_window.destroy()
 
     def select_image():
-
         '''Allowing the users to insert an image
         from their computer using filedialog. This selected
         image will be used as the cover image for the specific
         made diary'''
-
         file_path = filedialog.askopenfilename(
             title="Select Cover Image",
             filetypes=[("Image Files", "*.png *.jpg *.jpeg *.gif")]
@@ -72,133 +55,130 @@ def add_diary():
     new_window.geometry("600x600")
     new_window.configure(bg="#fffef8")
 
-    #Adding the title
     title_label = Label(new_window, text="Diary Title:", font=("Verdana", 14), bg="#fffef8", fg="#9d7757")
     title_label.place(relx=0.04, rely=0.1)
 
     title_entry = Entry(new_window, font=("Verdana", 14), width=40, bd=2)
     title_entry.place(relx=0.2, rely=0.1)
 
-    #Adding the description box.
     description_label = Label(new_window, text="Diary Description:", font=("Verdana", 14), bg="#fffef8", fg="#9d7757")
     description_label.place(relx=0.04, rely=0.2)
 
     description_entry = Text(new_window, font=("Verdana", 14), width=34, bd=2, wrap="word")
     description_entry.place(relx=0.28, rely=0.2, relheight=0.23)
 
-    #Adding cover image for the diary.
     image_path_var = tk.StringVar()
 
-    image_button = Button(new_window, text="Select Cover Photo", command=select_image, bg="#fffef8", fg="#9d7757", font=("Verdana", 14))
-    image_button.place(relx=0.3, rely=0.55) #Button that links to the select_image def and function
+    image_button = Button(new_window, text="Select Cover Image", command=select_image, bg="#f4c430", font=("Verdana", 12))
+    image_button.place(relx=0.3, rely=0.55)
 
     submit_button = Button(new_window, text="Add Diary", command=submit_diary, bg="palegreen", font=("Verdana", 12))
     submit_button.place(relx=0.42, rely=0.65)
 
+
 def update_sidebar():
+    '''Adding the newly created diary to the 
+    sidebar as a button. The user will then be able to access it by the function
+    open_diary, and then the user will have the ability to create new diary entries'''
 
-    '''This function will be used to update the sidebar
-    by adding the new diary names to the side bar.'''
-
+    #Remove existing buttons in the sidebar.
     for btn in sidebar_buttons:
         btn.destroy()
     sidebar_buttons.clear()
 
-    for idx, diary in enumerate(diaries): #Loops each "Add new diary entry" to make buttons for new diaries
-        btn = Button(root, text=diary["title"], font=("Verdana", 10), bg="#d8cab6", width=20, 
-                     command=lambda i=idx: open_diary(i))
+    for idx, diary in enumerate(diaries): #Loops through each diary on the diaries list.
+        btn = Button(root, text=diary["title"], font=("Verdana", 10), bg="#d8cab6", width=20,
+                     command=lambda i=idx: open_diary(i)) #i=idx needs to prevent the buttons from opening last diary.
         btn.place(relx=0.01, rely=0.2 + 0.05 * idx)
-        '''This is the code to make a new button for whenever the new diary is created'''
-        sidebar_buttons.append(btn) #Adding the newly made buttons to the sidebar
+        sidebar_buttons.append(btn)
+
 
 def open_diary(index):
-    global trial_diary_frame
-    if trial_diary_frame is not None:
-        trial_diary_frame.destroy()
-
     '''Def that will open the diary once clicked through the 
     side bar. This means that once the diary is created and
     placed in the side bar, the user is able to click it,
     opening a new page without actually creating a toplevel window on top'''
-
+    global current_diary_frame
     diary = diaries[index]
 
-    #Creating a trial diary frame that allows users to test the diary page.
-    trial_diary_frame = Frame(main_frame, bg="#fffef8", bd=2)
-    trial_diary_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
+    if current_diary_frame:
+        current_diary_frame.destroy()
 
-    #Creating the label for the diary title
-    trial_diary_title = Label(trial_diary_frame, text=diary["title"], font=("Verdana", 24), bg="#fffef8", fg="#9d7757")
-    trial_diary_title.place(pady=10)
+    current_diary_frame = Frame(root, bg="#fffef8")
+    current_diary_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
+
+    title_label = Label(current_diary_frame, text=diary["title"], font=("Verdana", 36), bg="#fffef8", fg="#9d7757")
+    title_label.pack(pady=40)
 
     if diary["image"]:
         try:
             img = Image.open(diary["image"])
             img = img.resize((300, 300), Image.Resampling.LANCZOS)
             img = ImageTk.PhotoImage(img)
-            img_label = Label(trial_diary_frame, image=img, bg="#fffef8")
+            img_label = Label(current_diary_frame, image=img, bg="#fffef8")
             img_label.image = img
             img_label.pack()
         except:
-            pass  #Doesn't show image if error occurs.
+            pass  #Image will not be shown if error occurs.
 
-    trial_description_label = Label(trial_diary_frame, text=diary["description"], font=("Verdana", 14), bg="#fffef8", wraplength=800)
-    trial_description_label.pack(pady=20)
+    description_label = Label(current_diary_frame, text=diary["description"], font=("Verdana", 14), bg="#fffef8", wraplength=800)
+    description_label.pack(pady=20)
+
 
 def sidebar():
-
-    '''The code for the GUI in the side bar on the side of the page.'''
-
+    '''Code for the sidebar on the homepage'''
     side_bar = Frame(root, bg="#e4d8c7")
     side_bar.place(relx=0, rely=0, relwidth=0.15, relheight=1)
     sidebar_separator = Frame(root, bg="#a89885")
     sidebar_separator.place(relx=0.15, rely=0, relwidth=0.005, relheight=1)
 
+
 def topbar():
-
-    '''The code for the GUI in the main bar at the top of the page.'''
-
+    '''Code for the topbar on the homepage'''
     top_bar = Frame(root, bg="#fffef8")
     top_bar.place(relx=0.155, rely=0, relwidth=0.845, relheight=0.15)
     topbar_separator = Frame(root, bg="#a89885")
     topbar_separator.place(relx=0.15, rely=0.15, relwidth=1, relheight=0.006)
 
-    #Moving image to top bar.
-    #image1 = "logo.png"  #Path to the logo.
-    #image = Image.open(image1)
-    #image = image.resize((135, 135), Image.Resampling.LANCZOS)
-    #icon_image = ImageTk.PhotoImage(image)
+    try:
+        image1 = "logo.png"
+        image = Image.open(image1)
+        image = image.resize((135, 135), Image.Resampling.LANCZOS)
+        icon_image = ImageTk.PhotoImage(image)
 
-    #icon_label = Label(top_bar, image=icon_image)
-    #icon_label.image = icon_image 
-    #icon_label.place(relx=0, rely=0, relwidth=0.1, relheight=1)
+        icon_label = Label(top_bar, image=icon_image)
+        icon_label.image = icon_image
+        icon_label.place(relx=0, rely=0, relwidth=0.1, relheight=1)
+    except:
+        pass  #Does not show if error occurs.
+
 
 def mainframe():
 
-    global main_frame
-    '''Main content area of the homepage.'''
-
+    #Main frame.
     main_frame = Frame(root, bg="#fffef8")
     main_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
 
-    #Creating a main heading for the page.
     my_diaries_label = Label(main_frame, text="My Diaries", font=("Verdana", 56), bg="#fffef8", fg="#9d7757")
     my_diaries_label.place(relx=0.08, rely=0.12)
 
-    #Creating the main frame in which the user can add a new diary.
-    add_new_diary_frame = Frame(main_frame, bg="#fffef8", highlightthickness = 4, highlightbackground="#a9a297")
+    add_new_diary_frame = Frame(main_frame, bg="#fffef8", bd=2, highlightbackground="hotpink",
+    highlightthickness=7)
     add_new_diary_frame.place(relx=0.4, rely=0.35, relheight=0.54, relwidth=0.24)
 
-    #Creating a button for creating a new diary.
-    add_diary_button = Button(add_new_diary_frame, text="+", font=("Arial", 40), bg="#fffef8", command=add_diary, bd=2)
+    add_diary_button = Button(add_new_diary_frame, text="+", font=("Arial", 40), bg="#f4c430", command=add_diary, bd=2)
     add_diary_button.place(relx=0.4, rely=0.43)
 
-#Run the main functions.
+# -------- Main root window --------
+
+root = tk.Tk()
+root.title("Diary App Homepage")
+root.geometry("1400x900")
+root.configure(bg="#fffef8")
+
+#Running the main functions before running the root.mainloop()
 sidebar()
 topbar()
 mainframe()
-if diaries:
-    open_diary(0)
 
-#Run the main root, after the functions.
 root.mainloop()
