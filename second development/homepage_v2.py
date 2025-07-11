@@ -28,7 +28,7 @@ def add_diary():
         if not title:
             return  #Add warning for empty title
 
-        # Save diary data
+        #Saves diary data.
         diary_data = {
             "title": title,
             "description": description,
@@ -58,17 +58,20 @@ def add_diary():
     title_label = Label(new_window, text="Diary Title:", font=("Verdana", 14), bg="#fffef8", fg="#9d7757")
     title_label.place(relx=0.04, rely=0.1)
 
+    #Adding a title.
     title_entry = Entry(new_window, font=("Verdana", 14), width=40, bd=2)
     title_entry.place(relx=0.2, rely=0.1)
 
     description_label = Label(new_window, text="Diary Description:", font=("Verdana", 14), bg="#fffef8", fg="#9d7757")
     description_label.place(relx=0.04, rely=0.2)
 
+    #Adding a diary description.
     description_entry = Text(new_window, font=("Verdana", 14), width=34, bd=2, wrap="word")
     description_entry.place(relx=0.28, rely=0.2, relheight=0.23)
 
     image_path_var = tk.StringVar()
 
+    #Adding the cover image.
     image_button = Button(new_window, text="Select Cover Image", command=select_image, bg="#f4c430", font=("Verdana", 12))
     image_button.place(relx=0.3, rely=0.55)
 
