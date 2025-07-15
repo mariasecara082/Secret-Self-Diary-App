@@ -15,6 +15,29 @@ import tkinter as tk
 from tkinter import IntVar, messagebox
 from PIL import Image, ImageTk
 from tkinter import ttk
+import sqlite3
+
+#Initializing database:
+def initialize_database():
+    conn = sqlite3.connect("questionnaire.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS responses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question_number INTEGER,
+            response TEXT
+        )
+    """)
+    conn.commit()
+    conn.close() 
+
+def save_response_to_db(question_number, response_text):
+    conn = sqlite3.connect("questionnaire.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO responses (question_number, response) VALUES (?, ?)", (question_number, response_text))
+    conn.commit()
+    conn.close()
+
 
 #Creating a dictionary with the options in the questionnaire.
 questionnaire_choices = [
@@ -34,10 +57,10 @@ def q1_answers():
     selected_feelings = [choice for choice, var in checkbox_vars.items() if var.get() == 1]
     
     try:
-        with open("daily_questionnaire.txt", "a") as f:
-            f.write(f"{selected_feelings}\n")
+        save_response_to_db(1, ", ".join(selected_feelings))
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
+        return
     if not selected_feelings:
         messagebox.showwarning("No selection", "Please select at least one option.")
         return
@@ -48,14 +71,16 @@ def q1_answers():
 def q2_answers():
     hilite_day = q2_entry.get().strip()
 
+    if not hilite_day:
+        messagebox.showerror("Error", "Please enter a response and try again")
+        return
+
     try:
-        with open("daily_questionnaire.txt", "a") as f:
-            f.write(f"Highlight: {hilite_day}\n")
+        save_response_to_db(2, hilite_day)
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
-    if not hilite_day:
-        messagebox.showerror("Error", f"Please enter a response and try again\n{e}")
         return
+    
     print("Highlight of day submitted")
     q2_window.destroy()
     q3_window_open()
@@ -100,12 +125,9 @@ def q3_answers():
 
     rating = q3_slider.get()
     try:
-        with open("daily_questionnaire.txt", "a") as f:
-            f.write(f"Day rating: {rating}/10\n")
-        #Destroying and closing this window
+        save_response_to_db(3, f"{rating}/10")
         q3_window.destroy()
-        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/second development/homepage_v2.py" 
-        '''opening up the daily questionnaire'''
+        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
         subprocess.Popen([sys.executable, script_path])
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
@@ -207,4 +229,6 @@ for idx, choice in enumerate(questionnaire_choices):
 q1_submit_button = tk.Button(root, text="Next", font=("Arial", 15), bg="mediumpurple", command=q1_answers)
 q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
+
+initialize_database()
 root.mainloop()
