@@ -59,16 +59,31 @@ def createnew_popup():
     popupwindow = ctk.CTkToplevel(root)
     popupwindow.title("Register new user")
     popupwindow.geometry("500x300")
-    popupwindow.configure(bg="#fffef8")
+    popupwindow.configure(fg_color="#fffef8")
     popupwindow.iconbitmap("images/logo.ico")
 
-    ctk.CTkLabel(popupwindow, text="Create username:", font=("Arial", 13)).pack(pady=5)
-    register_username_entry = ctk.CTkEntry(popupwindow)
-    register_username_entry.pack(pady=5)
+    #Label
+    ctk.CTkLabel(popupwindow, 
+                 text="SIGN UP", 
+                 font=("Helvetica", 24, "bold"), 
+                 fg_color="#fffef8", 
+                 text_color="#7c5b44").place(relx=0.42, rely=0.16)
 
-    ctk.CTkLabel(popupwindow, text="Create password: (8-20 characters long)", font=("Arial", 13)).pack(pady=5)
-    register_password_entry = ctk.CTkEntry(popupwindow, show="•")
-    register_password_entry.pack(pady=5)
+    register_username_entry = ctk.CTkEntry(popupwindow,
+                             font=("Arial", 13),  
+                             width=210, 
+                             placeholder_text="Create Username", 
+                             text_color="#7c5b44", 
+                             fg_color="#fffef8")
+    register_username_entry.place(relx=0.3, rely=0.4)
+
+    register_password_entry = ctk.CTkEntry(popupwindow,
+                             font=("Arial", 13),  
+                             width=210, 
+                             placeholder_text="Create Password", 
+                             text_color="#7c5b44", 
+                             fg_color="#fffef8")
+    register_password_entry.place(relx=0.3, rely=0.57)
 
     def save_new_user(): 
 
@@ -105,7 +120,11 @@ def createnew_popup():
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save user:\n{e}")
 
-    ctk.CTkButton(popupwindow, text="Create New User", command=save_new_user, fg_color="red", text_color="red").pack(pady=20)
+    ctk.CTkButton(popupwindow, 
+                  text="Create New User", 
+                  command=save_new_user, 
+                  fg_color="#7c5b44", text_color="#fffef8", hover_color="#b59a90",
+                  width=210).place(relx=0.3, rely=0.74)
 
     
     #new_user = new_user_name.get().strip()
@@ -114,7 +133,7 @@ def createnew_popup():
 #Creating a main window using root = tk.Tk().
 root = ctk.CTk()
 root.title("Secret Self Diary App")
-root.geometry("1000x700")
+root.geometry("1400x900")
 root.configure(fg_color="#fffef8") #Making the root colour have a background colour.
 root.iconbitmap("images/logo.ico")
 
@@ -123,26 +142,44 @@ welcome_message = ctk.CTkLabel(root, text="Secret Self Diary App", font=('Helvet
 welcome_message.place(relx=0.5, rely=0.1, anchor="center")
 
 #Login message below the welcome message
-login_message = ctk.CTkLabel(root, text="Login", font=('Helvetica', 28), fg_color="#fffef8", text_color="#7c5b44")
+login_message = ctk.CTkLabel(root, text="LOGIN", font=("Helvetica", 24, "bold"), text_color="#7c5b44")
 login_message.place(relx=0.5, rely=0.16, anchor="center")
 
 
 #Label for the user to enter their username
-user_name = ctk.CTkEntry(root, font=("Arial", 13), width=300, placeholder_text="Username")
+user_name = ctk.CTkEntry(root, 
+                         font=("Arial", 13), 
+                         width=300, 
+                         placeholder_text="Username", 
+                         text_color="#7c5b44", 
+                         fg_color="#fffef8")
 user_name.place(relx=0.4, rely=0.25)
 
 #Label for the user to enter their password.
-user_password = ctk.CTkEntry(root, font=("Arial", 13), show="•", width=300, placeholder_text="Password")
+user_password = ctk.CTkEntry(root, 
+                             font=("Arial", 13), 
+                             show="•", 
+                             width=300, 
+                             placeholder_text="Password", 
+                             text_color="#7c5b44", 
+                             fg_color="#fffef8")
 user_password.place(relx=0.4, rely=0.33)
 
 #Making a submit button for the login page, saving it to a text file.
-submit_info = ctk.CTkButton(root, text="Log In", font=("arial", 13), command=enter_user_name, fg_color="red", text_color="#7c5b44")
-submit_info.place(relx=0.46, rely=0.4)
+submit_info = ctk.CTkButton(root, 
+                            text="LOGIN", 
+                            command=enter_user_name, 
+                            fg_color="#7c5b44", 
+                            text_color="#fffef8", 
+                            hover_color="#b59a90",
+                            width=300)
+submit_info.place(relx=0.4, rely=0.4)
 
 #Creating a button where the user can register and make a new account.
 
-register_user = ctk.CTkButton(root, text="Register new user:", font=("arial", 13), command=createnew_popup, text_color="#7c5b44")
-register_user.place(relx=0.36, rely=0.46)
+signup_text = ctk.CTkLabel(root, text="Don't have an account? Sign up here", text_color="#7c5b44", cursor="hand2", font=("Arial", 12, "underline"))
+signup_text.place(relx=0.44, rely=0.45)
+signup_text.bind("<Button-1>", lambda e: createnew_popup())
 
 
 root.mainloop()
