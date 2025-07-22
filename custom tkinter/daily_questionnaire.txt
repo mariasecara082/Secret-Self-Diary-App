@@ -1,0 +1,6 @@
+[' Peaceful ✌️']
+[' Stressed 😰', ' Tired 😴']
+[' Curious 👀', ' Disappointed 🫠']
+[' Stressed 😰']
+[' Curious 👀']
+Feelings: [' Bored 🥱', ' Ashamed 🙈']
