@@ -11,6 +11,7 @@ from PIL import Image, ImageTk
 import subprocess
 import sys
 from tkinter import HORIZONTAL
+from datetime import datetime
 
 #Creating the main root.
 root = ctk.CTk()
@@ -46,11 +47,13 @@ def show_frame(frame):
 
 checkbox_vars = {}
 
-welcome_message = ctk.CTkLabel(frame_q1, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44")
+welcome_message = ctk.CTkLabel(frame_q1, 
+                            text="Welcome back, username", 
+                            font=('Helvetica', 32), fg_color="#fffef8", text_color="#7c5b44")
 welcome_message.place(relx=0.5, rely=0.15, anchor="center")
 
-q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", font=("Arial", 20), fg_color="#fffef8", text_color="#898686")
-q1_label.place(relx=0.5, rely=0.22, anchor="center")
+q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686")
+q1_label.place(relx=0.5, rely=0.25, anchor="center")
 
 progressq1 = ctk.CTkProgressBar(frame_q1, width=400)
 progressq1.place(relx=0.5, rely=0.05, anchor="center")
@@ -64,7 +67,7 @@ for idx, choice in enumerate(questionnaire_choices):
     col = idx % 3
     row = idx // 3
 
-    checkbox = ctk.CTkCheckBox(root,
+    checkbox = ctk.CTkCheckBox(frame_q1,
     text=choice,
     variable=var,
     fg_color="#f4c430",
@@ -127,53 +130,32 @@ ctk.CTkButton(frame_q2,
                   fg_color="#f4c430", 
                   command=q2_answers).place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
+#-------------- Question 3 -------------- The GUI as well as the back ended code.
+ctk.CTkLabel(frame_q3, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
+
+progressq3 = ctk.CTkProgressBar(frame_q3, width=400)
+progressq3.place(relx=0.5, rely=0.05, anchor="center")
+progressq3.set(1)
+
+ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+
+q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20)
+q3_slider.set(5)
+q3_slider.place(relx=0.32, rely=0.4)
 
 def q3_answers():
-
-    '''This def will be used to create the
-    back ended things needed for the third question of the code.'''
-
-    rating = q3_slider.get()
+    rating = round(q3_slider.get())
     try:
         with open("daily_questionnaire.txt", "a") as f:
             f.write(f"Day rating: {rating}/10\n")
-        #Destroying and closing this window
-        q3_window.destroy()
-        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/second development/homepage_v2.py" 
-        '''opening up the daily questionnaire'''
-        subprocess.Popen([sys.executable, script_path])
+            f.write(f"Submitted: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        messagebox.showinfo("Submitted", "Your answers have been saved. Thank you!")
+        root.destroy()
     except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
+        messagebox.showerror("Error", str(e))
+
+ctk.CTkButton(frame_q3, text="Submit", font=("Arial", 14), fg_color="#f4c430", command=q3_answers).place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 
-def q3_window_open():
-
-    '''This def will be used to create the GUI for
-    the third question in the questionnaire. It opens right after
-    the q2 window (which belongs to question 2) 
-    get destroyed.'''
-
-    global q3_window, q3_slider
-    q3_window = ctk.CTkToplevel()
-    q3_window.title("Secret Self Diary App")
-    q3_window.geometry("1400x900")
-    q3_window.configure(fg_color="#fffef8")
-    q3_window.iconbitmap("images/logo.ico")
-
-    ctk.CTkLabel(q3_window, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
-
-    progressq3 = ctk.CTkProgressBar(q3_window, orient="horizontal", length=400, mode="determinate")
-    progressq3.place(relx=0.5, rely=0.05, anchor="center")
-    progressq3.set(1.0)
-
-    ctk.CTkLabel(q3_window, text="Rate your day on a scale from 1-10:", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
-
-    q3_slider = ctk.CTkSlider(q3_window, from_=0, to=10, number_of_steps=20)
-    q3_slider.set(5)
-    q3_slider.place(relx=0.32, rely=0.4)
-
-    ctk.CTkButton(q3_window, text="Submit", font=("Arial", 14), fg_color="#f4c430", command=q3_answers).place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
-
-
-
+show_frame(frame_q1)
 root.mainloop()
