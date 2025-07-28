@@ -90,14 +90,14 @@ for idx, choice in enumerate(questionnaire_choices):
     checkbox = ctk.CTkCheckBox(frame_q1,
     text=choice,
     variable=var,
-    fg_color="#f4c430",
-    text_color="#333333",
+    fg_color="#bed0d4",
+    text_color="#333333", hover_color="#dae7e9",
     font=("Arial", 14)
 )
     checkbox.place(relx=0.15 + col * 0.25, rely=0.4 + row * 0.08, relwidth=0.2, relheight=0.1)
     checkbox_vars[choice] = var
 
-#Saving the answers into a textfile
+#Saving the answers into a database
 def q1_answers():
     selected = [choice for choice, var in checkbox_vars.items() if var.get() == 1]
     if not selected:
@@ -105,7 +105,7 @@ def q1_answers():
         return
     try:
         save_response_to_db(1, ", ".join(selected))
-        show_frame(frame_q2) # <------ Changed line here. <------
+        show_frame(frame_q2)
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
         return
@@ -117,7 +117,8 @@ def q1_answers():
 #Making the submit buttons for the questions
 q1_submit_button = ctk.CTkButton(frame_q1, text="Next", 
                                  font=("Arial", 15), fg_color="#bed0d4", 
-                                 command=q1_answers, text_color="#7c5b44")
+                                 command=q1_answers, text_color="#614836",
+                                 hover_color="#dae7e9")
 q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 #-------------- Question 2 -------------- The GUI as well as the back ended code.
@@ -133,7 +134,7 @@ progressq2 = ctk.CTkProgressBar(frame_q2, width=400, progress_color="#bed0d4")
 progressq2.place(relx=0.5, rely=0.05, anchor="center")
 progressq2.set(0.66)
 
-ctk.CTkLabel(frame_q2, text="What was the highlight of your day?", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+ctk.CTkLabel(frame_q2, text="What was the highlight of your day?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
 q2_entry = ctk.CTkEntry(frame_q2, width=400, font=("Arial", 14))
 q2_entry.place(relx=0.5, rely=0.4, anchor="center")
@@ -151,10 +152,9 @@ def q2_answers():
         return
 
 ctk.CTkButton(frame_q2, text="Next", 
-                                 font=("Arial", 15), 
-                                 fg_color="#bed0d4", 
-                                 command=q2_answers, 
-                                 text_color="#7c5b44").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
+                                 font=("Arial", 15), fg_color="#bed0d4", 
+                                 command=q2_answers, text_color="#614836",
+                                 hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 #-------------- Question 3 -------------- The GUI as well as the back ended code.
 ctk.CTkLabel(frame_q3, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
@@ -163,7 +163,7 @@ progressq3 = ctk.CTkProgressBar(frame_q3, width=400, progress_color="#bed0d4")
 progressq3.place(relx=0.5, rely=0.05, anchor="center")
 progressq3.set(1)
 
-ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
 q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20)
 q3_slider.set(5)
@@ -179,11 +179,10 @@ def q3_answers():
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
 
-ctk.CTkButton(frame_q3, text="Next", 
-                                 font=("Arial", 15), 
-                                 fg_color="#bed0d4", 
-                                 command=q3_answers, 
-                                 text_color="#7c5b44").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
+ctk.CTkButton(frame_q3, text="Submit", 
+                                 font=("Arial", 15), fg_color="#bed0d4", 
+                                 command=q3_answers, text_color="#614836",
+                                 hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 
 show_frame(frame_q1)
