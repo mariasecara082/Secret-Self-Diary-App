@@ -1,20 +1,15 @@
 '''this will be used as the questionnaire page.
 all functions coded will be put here (GUI and back end python)'''
+'''This version will be done using the database. This database
+has been developed after changing the questionnaire page to ctk'''
 
-'''Version Three (V3, this version), is the version with changed GUI, as well
-as changed transitioning between the questions inside the quenstionnaire.
-Instead of using a new window to change between the questions, a new
-frame will be made. The option to go back to the old  question to
-give the users freedom to change their answers. The final answers will
-only be seen on the textfile once the whole questionnaire has been submitted'''
-
-from tkinter import *
+import customtkinter as ctk
+from tkinter import messagebox, IntVar
+from PIL import Image, ImageTk
 import subprocess
 import sys
-import tkinter as tk
-from tkinter import IntVar, messagebox
-from PIL import Image, ImageTk
-from tkinter import ttk
+from tkinter import HORIZONTAL
+from datetime import datetime
 import sqlite3
 
 #Initializing database:
@@ -38,6 +33,11 @@ def save_response_to_db(question_number, response_text):
     conn.commit()
     conn.close()
 
+#Creating the main root.
+root = ctk.CTk()
+root.title("Secret Self Diary App")
+root.geometry("1400x900")
+root.configure(fg_color="#fffef8")
 
 #Creating a dictionary with the options in the questionnaire.
 questionnaire_choices = [
@@ -45,190 +45,146 @@ questionnaire_choices = [
     " Stressed 😰"," Joyful 😄", " Grateful 🥹", " Lonely 😔", 
     " Ashamed 🙈", " Tired 😴", " Disappointed 🫠", " Peaceful ✌️"]
 
-#Function where the users can submit their choices.
-def q1_answers():
+#Creating different frames for each question
+frame_q1 = ctk.CTkFrame(root, fg_color="#fffef8")
+frame_q2 = ctk.CTkFrame(root, fg_color="#fffef8")
+frame_q3 = ctk.CTkFrame(root, fg_color="#fffef8")
 
-    '''Here is the back ended code needed for
+#Packing the frames in the root.
+for frame in (frame_q1, frame_q2, frame_q3):
+    frame.place(relwidth=1, relheight=1)
+
+#Switching between the frames.
+def show_frame(frame):
+    frame.tkraise()
+
+#-------------- Question 1 -------------- The GUI as well as the back ended code.
+'''Here is the back ended code needed for
     creating the first question. Below, there is the selected_feelings,
     which is a list of all the options the user can choose. There is also
     a try and except to save the choices into a text file, and there is an if
     statement to warn the user that no option has been selected.'''
 
-    selected_feelings = [choice for choice, var in checkbox_vars.items() if var.get() == 1]
-    
-    try:
-        save_response_to_db(1, ", ".join(selected_feelings))
-    except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
-        return
-    if not selected_feelings:
-        messagebox.showwarning("No selection", "Please select at least one option.")
-        return
-    print("User feelings submitted")
-    root.destroy()
-    q2_window_open()
+checkbox_vars = {}
 
-def q2_answers():
-    hilite_day = q2_entry.get().strip()
-
-    if not hilite_day:
-        messagebox.showerror("Error", "Please enter a response and try again")
-        return
-
-    try:
-        save_response_to_db(2, hilite_day)
-    except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
-        return
-    
-    print("Highlight of day submitted")
-    q2_window.destroy()
-    q3_window_open()
-
-
-def q2_window_open():
-
-    '''This def will be used to create the GUI for
-    the second question in the questionnaire. It opens right after
-    the root window (which belongs to question 1) 
-    get destroyed.'''
-
-    global q2_window, q2_entry
-    q2_window = tk.Tk()
-    q2_window.title("Secret Self Diary App")
-    q2_window.geometry("1400x900")
-    q2_window.configure(bg="#fffef8") #Making the root colour have a background colour.
-    q2_window.iconbitmap("images/logo.ico")
-
-    welcome_message = Label(q2_window, text="Welcome back, username", font=("Biski", 25), bg="#fffef8", fg="#7c5b44")
-    welcome_message.place(relx=0.5, rely=0.15, anchor="center")
-
-    progressq2 = ttk.Progressbar(q2_window, orient="horizontal", length=400, mode="determinate")
-    progressq2.place(relx=0.5, rely=0.05, anchor="center")
-    progressq2["value"] = 66
-
-    q2_label = tk.Label(q2_window, text="What was the highlight of your day?", font=("Arial", 20), bg="#fffef8", fg="#898686")
-    q2_label.place(relx=0.5, rely=0.22, anchor="center")
-    
-    q2_entry = Entry(q2_window, fg="#898686", width=50, font=("Arial", 14))
-    q2_entry.place(relx=0.5, rely=0.4, anchor="center")
-
-    q2_submit_button = tk.Button(q2_window, text="Submit", font=("Arial", 14), bg="#f4c430", command=q2_answers)
-    q2_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
-    
-    q2_window_open.mainloop()
-
-def q3_answers():
-
-    '''This def will be used to create the
-    back ended things needed for the third question of the code.'''
-
-    rating = q3_slider.get()
-    try:
-        save_response_to_db(3, f"{rating}/10")
-        q3_window.destroy()
-        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
-        subprocess.Popen([sys.executable, script_path])
-    except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
-
-
-def q3_window_open():
-
-    '''This def will be used to create the GUI for
-    the third question in the questionnaire. It opens right after
-    the q2 window (which belongs to question 2) 
-    get destroyed.'''
-
-    global q3_window, q3_slider
-    q3_window = tk.Tk()
-    q3_window.title("Secret Self Diary App")
-    q3_window.geometry("1400x900")
-    q3_window.configure(bg="#fffef8") #Making the root colour have a background colour.
-    q3_window.iconbitmap("images/logo.ico")
-
-    welcome_message = Label(q3_window, text="Welcome back, username", font=("Biski", 25), bg="#fffef8", fg="#7c5b44")
-    welcome_message.place(relx=0.5, rely=0.15, anchor="center")
-
-    progressq3 = ttk.Progressbar(q3_window, orient="horizontal", length=400, mode="determinate")
-    progressq3.place(relx=0.5, rely=0.05, anchor="center")
-    progressq3["value"] = 100
-
-    q3_label = tk.Label(q3_window, text="Rate your day on a scale from 1-10:", font=("Arial", 20), bg="#fffef8", fg="#898686")
-    q3_label.place(relx=0.5, rely=0.22, anchor="center")
-
-    q3_slider = tk.Scale(q3_window, from_=0, to=10, orient=HORIZONTAL, length=500, tickinterval=0.5, font=("Arial", 12))
-    q3_slider.set(5)
-    q3_slider.place(relx=0.32, rely=0.4)
-    q3_submit_button = tk.Button(q3_window, text="Submit", font=("Arial", 14), bg="#f4c430", command=q3_answers)
-    q3_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
-    
-    q3_window_open.mainloop()
-
-#Creating the main window in which the quiz will be located.
-root = tk.Tk()
-root.title("Secret Self Diary App")
-root.geometry("1400x900")
-root.configure(bg="#fffef8") #Making the root colour have a background colour.
-root.iconbitmap("images/logo.ico") #Adding the logo
-
-#Making a frame to outline the questionnaire
-#This will take away from the whitespace a bit
-main_frame = Frame(root, bg="#ffffff")
-
-#Images for the checked and unchecked checklist boxes
-def flatten_transparent_png(image_path, bg_color="#fffef8"):
-    im = Image.open(image_path).convert("RGBA")
-    background = Image.new("RGBA", im.size, bg_color)
-    alpha = im.split()[-1]
-    background.paste(im, mask=alpha)
-    return background.convert("RGB")
-
-unchecked_pil = flatten_transparent_png("untickedbox.png").resize((48, 48), Image.Resampling.LANCZOS)
-checked_pil = flatten_transparent_png("tickedbox.png").resize((48, 48), Image.Resampling.LANCZOS)
-
-unchecked_image = ImageTk.PhotoImage(unchecked_pil)
-checked_image = ImageTk.PhotoImage(checked_pil)
-
-welcome_message = Label(root, text="Welcome back, username", font=("Biski", 25), bg="#fffef8", fg="#7c5b44")
+welcome_message = ctk.CTkLabel(frame_q1, 
+                            text="Welcome back, username", 
+                            font=('Helvetica', 32), fg_color="#fffef8", text_color="#7c5b44")
 welcome_message.place(relx=0.5, rely=0.15, anchor="center")
 
-q1_label = tk.Label(root, text="How are you feeling today?", font=("Arial", 20), bg="#fffef8", fg="#898686")
-q1_label.place(relx=0.5, rely=0.22, anchor="center")
+q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686")
+q1_label.place(relx=0.5, rely=0.25, anchor="center")
 
-progressq1 = ttk.Progressbar(root, orient="horizontal", length=400, mode="determinate")
+progressq1 = ctk.CTkProgressBar(frame_q1, width=400, progress_color="#bed0d4")
 progressq1.place(relx=0.5, rely=0.05, anchor="center")
-progressq1["value"] = 33
+progressq1.set(0.33)
 
 #Create checkboxes.
-checkbox_vars = {}
 for idx, choice in enumerate(questionnaire_choices):
     var = IntVar()
-    
     
     #Positioning in 3 rows and 3 columns.
     col = idx % 3
     row = idx // 3
 
-    checkbox = tk.Checkbutton(#Images
+    checkbox = ctk.CTkCheckBox(frame_q1,
     text=choice,
     variable=var,
-    image=unchecked_image,
-    selectimage=checked_image,
-    compound="left", #Moves the image to the left of the text
-    indicatoron=False,  #Removes small default box
-    bg="#fffef8"
-    )
+    fg_color="#f4c430",
+    text_color="#333333",
+    font=("Arial", 14)
+)
     checkbox.place(relx=0.15 + col * 0.25, rely=0.4 + row * 0.08, relwidth=0.2, relheight=0.1)
     checkbox_vars[choice] = var
-    
-    checkbox.image = unchecked_image 
-    checkbox.selectimage = checked_image
+
+#Saving the answers into a textfile
+def q1_answers():
+    selected = [choice for choice, var in checkbox_vars.items() if var.get() == 1]
+    if not selected:
+        messagebox.showwarning("No selection", "Please select at least one feeling.")
+        return
+    try:
+        save_response_to_db(1, ", ".join(selected))
+        show_frame(frame_q2) # <------ Changed line here. <------
+    except Exception as e:
+        messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
+        return
+    if not selected:
+        messagebox.showwarning("No selection", "Please select at least one option.")
+        return
+    print("User feelings submitted")
 
 #Making the submit buttons for the questions
-q1_submit_button = tk.Button(root, text="Next", font=("Arial", 15), bg="mediumpurple", command=q1_answers)
+q1_submit_button = ctk.CTkButton(frame_q1, text="Next", 
+                                 font=("Arial", 15), fg_color="#bed0d4", 
+                                 command=q1_answers, text_color="#7c5b44")
 q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
+#-------------- Question 2 -------------- The GUI as well as the back ended code.
+'''This def will be used to create the GUI for
+    the second question in the questionnaire. It opens right after
+    the submit button to the question 1 is pressed. Unlike in the 
+    past, instead of destroying the window and creating a new one,
+    this will actually change the frames between each other.'''
 
-initialize_database()
+ctk.CTkLabel(frame_q2, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
+
+progressq2 = ctk.CTkProgressBar(frame_q2, width=400, progress_color="#bed0d4")
+progressq2.place(relx=0.5, rely=0.05, anchor="center")
+progressq2.set(0.66)
+
+ctk.CTkLabel(frame_q2, text="What was the highlight of your day?", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+
+q2_entry = ctk.CTkEntry(frame_q2, width=400, font=("Arial", 14))
+q2_entry.place(relx=0.5, rely=0.4, anchor="center")
+
+def q2_answers():
+    highlight = q2_entry.get().strip()
+    if not highlight:
+        messagebox.showwarning("Empty Field", "Please enter your highlight.")
+        return
+    try:
+        save_response_to_db(2, highlight)
+        show_frame(frame_q3)
+    except Exception as e:
+        messagebox.showerror("Error", f"Something went wrong. Please try again!\n{e}")
+        return
+
+ctk.CTkButton(frame_q2, text="Next", 
+                                 font=("Arial", 15), 
+                                 fg_color="#bed0d4", 
+                                 command=q2_answers, 
+                                 text_color="#7c5b44").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
+
+#-------------- Question 3 -------------- The GUI as well as the back ended code.
+ctk.CTkLabel(frame_q3, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
+
+progressq3 = ctk.CTkProgressBar(frame_q3, width=400, progress_color="#bed0d4")
+progressq3.place(relx=0.5, rely=0.05, anchor="center")
+progressq3.set(1)
+
+ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", font=("Arial", 20), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+
+q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20)
+q3_slider.set(5)
+q3_slider.place(relx=0.32, rely=0.4)
+
+def q3_answers():
+    rating = round(q3_slider.get())
+    try:
+        save_response_to_db(3, f"{rating}/10")
+        root.destroy()
+        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
+        subprocess.Popen([sys.executable, script_path])
+    except Exception as e:
+        messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
+
+ctk.CTkButton(frame_q3, text="Next", 
+                                 font=("Arial", 15), 
+                                 fg_color="#bed0d4", 
+                                 command=q3_answers, 
+                                 text_color="#7c5b44").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
+
+
+show_frame(frame_q1)
 root.mainloop()

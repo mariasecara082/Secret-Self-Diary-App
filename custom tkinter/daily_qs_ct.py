@@ -55,7 +55,7 @@ welcome_message.place(relx=0.5, rely=0.15, anchor="center")
 q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686")
 q1_label.place(relx=0.5, rely=0.25, anchor="center")
 
-progressq1 = ctk.CTkProgressBar(frame_q1, width=400)
+progressq1 = ctk.CTkProgressBar(frame_q1, width=400, progress_color="#bed0d4")
 progressq1.place(relx=0.5, rely=0.05, anchor="center")
 progressq1.set(0.33)
 
