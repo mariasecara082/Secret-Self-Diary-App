@@ -165,16 +165,22 @@ def mainframe():
     main_frame = ctk.CTkFrame(root, fg_color="#fffef8")
     main_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
 
-    my_diaries_label = ctk.CTkLabel(main_frame, text="My Diaries", font=("Verdana", 56), fg_color="#fffef8", text_color="#9d7757")
+    my_diaries_label = ctk.CTkLabel(main_frame, 
+                                    text="My Diaries", 
+                                    font=("Helvetica", 56, "bold"), fg_color="#fffef8", 
+                                    text_color="#9d7757")
     my_diaries_label.place(relx=0.08, rely=0.12)
 
     add_new_diary_frame = ctk.CTkFrame(main_frame, 
                                        fg_color="#fffef8", 
-                                       border_width=2, border_color="hotpink")
-    add_new_diary_frame.place(relx=0.4, rely=0.35, relheight=0.54, relwidth=0.24)
+                                       border_width=2, border_color="#9d7757")
+    add_new_diary_frame.place(relx=0.08, rely=0.35, relheight=0.54, relwidth=0.24)
 
-    add_diary_button = ctk.CTkButton(add_new_diary_frame, text="+", font=("Arial", 40), fg_color="#f4c430", command=add_diary, border_width=2)
-    add_diary_button.place(relx=0.4, rely=0.43)
+    add_diary_button = ctk.CTkButton(add_new_diary_frame, text="+", 
+                                     font=("Helvetica", 50), fg_color="#fffef8",
+                                     text_color="#bed0d4", hover_color="#dae7e9",border_color="#a89885",
+                                     command=add_diary, border_width=2, width=90,height=90)
+    add_diary_button.place(relx=0.32, rely=0.38)
 
 # -------- Main root window --------
 
@@ -189,3 +195,4 @@ topbar()
 mainframe()
 
 root.mainloop()
+
