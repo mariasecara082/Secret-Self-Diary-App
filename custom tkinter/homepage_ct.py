@@ -141,10 +141,14 @@ def sidebar():
 
 def topbar():
     '''Code for the topbar on the homepage'''
+    #Creating a main frame at the top of the homepage.
     top_bar = ctk.CTkFrame(root, fg_color="#fffef8")
     top_bar.place(relx=0.155, rely=0, relwidth=0.845, relheight=0.15)
-    topbar_separator = ctk.CTkFrame(root, fg_color="#a89885") #<-- Fixed by adding ctk.Ctk prefix
-    topbar_separator.place(relx=0.15, rely=0.15, relwidth=1, relheight=0.006)
+    topbar_separator = ctk.CTkFrame(root, fg_color="#a89885") 
+    topbar_separator.place(relx=0.15, 
+                           rely=0.15, 
+                           relwidth=1, 
+                           relheight=0.006)
 
     try:
         image1 = "logo.png"

@@ -58,7 +58,7 @@ for frame in (frame_q1, frame_q2, frame_q3):
 def show_frame(frame):
     frame.tkraise()
 
-#-------------- Question 1 -------------- The GUI as well as the back ended code.
+#-------------- QUESTION 1 -------------- The GUI as well as the back ended code.
 '''Here is the back ended code needed for
     creating the first question. Below, there is the selected_feelings,
     which is a list of all the options the user can choose. There is also
@@ -121,7 +121,7 @@ q1_submit_button = ctk.CTkButton(frame_q1, text="Next",
                                  hover_color="#dae7e9")
 q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
-#-------------- Question 2 -------------- The GUI as well as the back ended code.
+#-------------- QUESTION 2 -------------- The GUI as well as the back ended code.
 '''This def will be used to create the GUI for
     the second question in the questionnaire. It opens right after
     the submit button to the question 1 is pressed. Unlike in the 
@@ -156,7 +156,7 @@ ctk.CTkButton(frame_q2, text="Next",
                                  command=q2_answers, text_color="#614836",
                                  hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
-#-------------- Question 3 -------------- The GUI as well as the back ended code.
+#-------------- QUESTION 3 -------------- The GUI as well as the back ended code.
 ctk.CTkLabel(frame_q3, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
 
 progressq3 = ctk.CTkProgressBar(frame_q3, width=400, progress_color="#bed0d4")

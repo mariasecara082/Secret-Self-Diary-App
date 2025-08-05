@@ -20,7 +20,7 @@ def initialize_user_database():
     conn.commit()
     conn.close()
 
-#Here, I am starting to code the GUI for the login page. For the sake of this testing, use the username test and test123.
+#Here, I am starting to code the GUI for the login page.
 def enter_user_name():
 
     '''main function (on the login page)
