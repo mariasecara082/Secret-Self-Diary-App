@@ -58,19 +58,30 @@ def add_diary():
     new_window.geometry("600x600")
     new_window.configure(fg_color="#fffef8")
 
-    title_label = ctk.CTkLabel(new_window, text="Diary Title:", font=("Verdana", 14), fg_color="#fffef8", text_color="#9d7757")
+    title_label = ctk.CTkLabel(new_window, text="Diary Title:", 
+                               font=('Verdana', 18), 
+                               fg_color="#fffef8", 
+                               text_color="#7c5b44")
     title_label.place(relx=0.04, rely=0.1)
 
     #Adding a title.
-    title_entry = ctk.CTkEntry(new_window, font=("Verdana", 14), width=40, border_width=2)
-    title_entry.place(relx=0.2, rely=0.1)
+    title_entry = ctk.CTkEntry(new_window, font=("Verdana", 14), 
+                               text_color="#7c5b44", fg_color="#fffef8",
+                               width=300, border_width=2)
+    title_entry.place(relx=0.23, rely=0.1)
 
-    description_label = ctk.CTkLabel(new_window, text="Diary Description:", font=("Verdana", 14), fg_color="#fffef8", text_color="#9d7757")
+    description_label = ctk.CTkLabel(new_window, text="Description:", 
+                                     font=('Verdana', 18), 
+                                     fg_color="#fffef8", 
+                                     text_color="#7c5b44")
     description_label.place(relx=0.04, rely=0.2)
 
     #Adding a diary description.
-    description_entry = ctk.CTkText(new_window, font=("Verdana", 14), width=34,border_width =2, wrap="word")
-    description_entry.place(relx=0.28, rely=0.2, relheight=0.23)
+    description_entry = ctk.CTkTextbox(new_window, 
+                                       font=('Verdana', 14), 
+                                     text_color="#7c5b44", fg_color="#fffef8",
+                                       width=340,border_width =2, wrap="word")
+    description_entry.place(relx=0.23, rely=0.2, relheight=0.23)
 
     image_path_var = ctk.CTkStringVar()
 

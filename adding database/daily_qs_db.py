@@ -1,5 +1,6 @@
 '''this will be used as the questionnaire page.
 all functions coded will be put here (GUI and back end python)'''
+
 '''This version will be done using the database. This database
 has been developed after changing the questionnaire page to ctk'''
 
@@ -27,6 +28,10 @@ def initialize_database():
     conn.close() 
 
 def save_response_to_db(question_number, response_text):
+
+    '''This function will be used to saving the user's
+    response to the database that was previously initialised.'''
+
     conn = sqlite3.connect("questionnaire.db")
     cursor = conn.cursor()
     cursor.execute("INSERT INTO responses (question_number, response) VALUES (?, ?)", (question_number, response_text))
@@ -57,6 +62,7 @@ for frame in (frame_q1, frame_q2, frame_q3):
 #Switching between the frames.
 def show_frame(frame):
     frame.tkraise()
+
 
 #-------------- QUESTION 1 -------------- The GUI as well as the back ended code.
 '''Here is the back ended code needed for
@@ -121,6 +127,7 @@ q1_submit_button = ctk.CTkButton(frame_q1, text="Next",
                                  hover_color="#dae7e9")
 q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
+
 #-------------- QUESTION 2 -------------- The GUI as well as the back ended code.
 '''This def will be used to create the GUI for
     the second question in the questionnaire. It opens right after
@@ -157,19 +164,30 @@ ctk.CTkButton(frame_q2, text="Next",
                                  hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 #-------------- QUESTION 3 -------------- The GUI as well as the back ended code.
-ctk.CTkLabel(frame_q3, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
+ctk.CTkLabel(frame_q3, text="Welcome back, username", 
+             font=("Biski", 25), 
+             fg_color="#fffef8", 
+             text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
 
+#Creating a progress bar 
 progressq3 = ctk.CTkProgressBar(frame_q3, width=400, progress_color="#bed0d4")
 progressq3.place(relx=0.5, rely=0.05, anchor="center")
 progressq3.set(1)
 
-ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:", 
+             font=("Helvetica", 23, "bold"), fg_color="#fffef8", 
+             text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
 q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20)
 q3_slider.set(5)
 q3_slider.place(relx=0.32, rely=0.4)
 
 def q3_answers():
+
+    '''This function is being used to save the question 3
+    answers into the database by calling the function
+    named save_response_to_db'''
+
     rating = round(q3_slider.get())
     try:
         save_response_to_db(3, f"{rating}/10")
