@@ -79,6 +79,13 @@ def createnew_popup():
     popupwindow.configure(fg_color="#fffef8")
     popupwindow.iconbitmap("images/logo.ico")
 
+    window_width, window_height = 800, 300
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    x = (screen_width // 2) - (window_width // 2)
+    y = (screen_height // 2) - (window_height // 2)
+    popupwindow.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
     #Label
     ctk.CTkLabel(popupwindow, 
                  text="SIGN UP", 
