@@ -97,14 +97,14 @@ def createnew_popup():
                              font=("Arial", 13),  
                              width=210, 
                              placeholder_text="Create Username", 
-                             text_color="#7c5b44", 
-                             show="•",
+                             text_color="#7c5b44",
                              fg_color="#fffef8")
     register_username_entry.place(relx=0.3, rely=0.4)
 
     register_password_entry = ctk.CTkEntry(popupwindow,
                              font=("Arial", 13),  
                              width=210, 
+                             show="•",
                              placeholder_text="Create Password", 
                              text_color="#7c5b44", 
                              fg_color="#fffef8")
@@ -113,21 +113,19 @@ def createnew_popup():
     def toggle_password():
         if register_password_entry.cget("show") == "•":
             register_password_entry.configure(show="")   #Shows password.
-            toggle_btn.configure(text="Hide")
+            toggle_label.configure(text="Hide")
         else:
             register_password_entry.configure(show="•")  #Hides password
-            toggle_btn.configure(text="Show")
+            toggle_label.configure(text="Show")
 
     #Toggle button next to registration entry
-    toggle_btn = ctk.CTkButton(popupwindow, 
-                               text="Show", 
-                               command=toggle_password, 
-                               width=60, 
-                               fg_color="#b59a90", 
-                               text_color="#fffef8", 
-                               hover_color="#7c5b44")
-    toggle_btn.place(relx=0.72, rely=0.57)
-
+    toggle_label = ctk.CTkLabel(popupwindow, 
+                                text="Show", 
+                                text_color="#7c5b44", 
+                                font=("Arial", 11, "underline"), 
+                                cursor="hand2")
+    toggle_label.place(relx=0.72, rely=0.57)
+    toggle_label.bind("<Button-1>", lambda e: toggle_password())
     def save_new_user(): 
 
         '''this function is made to save 
