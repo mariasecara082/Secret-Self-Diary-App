@@ -79,7 +79,7 @@ def createnew_popup():
     popupwindow.configure(fg_color="#fffef8")
     popupwindow.iconbitmap("images/logo.ico")
 
-    window_width, window_height = 800, 300
+    window_width, window_height = 500, 300
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width // 2) - (window_width // 2)
@@ -98,6 +98,7 @@ def createnew_popup():
                              width=210, 
                              placeholder_text="Create Username", 
                              text_color="#7c5b44", 
+                             show="•",
                              fg_color="#fffef8")
     register_username_entry.place(relx=0.3, rely=0.4)
 
@@ -108,6 +109,24 @@ def createnew_popup():
                              text_color="#7c5b44", 
                              fg_color="#fffef8")
     register_password_entry.place(relx=0.3, rely=0.57)
+
+    def toggle_password():
+        if register_password_entry.cget("show") == "•":
+            register_password_entry.configure(show="")   #Shows password.
+            toggle_btn.configure(text="Hide")
+        else:
+            register_password_entry.configure(show="•")  #Hides password
+            toggle_btn.configure(text="Show")
+
+    #Toggle button next to registration entry
+    toggle_btn = ctk.CTkButton(popupwindow, 
+                               text="Show", 
+                               command=toggle_password, 
+                               width=60, 
+                               fg_color="#b59a90", 
+                               text_color="#fffef8", 
+                               hover_color="#7c5b44")
+    toggle_btn.place(relx=0.72, rely=0.57)
 
     def save_new_user(): 
 
