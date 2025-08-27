@@ -124,7 +124,7 @@ def createnew_popup():
                                 text_color="#7c5b44", 
                                 font=("Arial", 11, "underline"), 
                                 cursor="hand2")
-    toggle_label.place(relx=0.72, rely=0.57)
+    toggle_label.place(relx=0.74, rely=0.57)
     toggle_label.bind("<Button-1>", lambda e: toggle_password())
     def save_new_user(): 
 
