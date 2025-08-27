@@ -178,9 +178,9 @@ ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:",
              font=("Helvetica", 23, "bold"), fg_color="#fffef8", 
              text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
-q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20)
+q3_slider = ctk.CTkSlider(frame_q3, from_=0, to=10, number_of_steps=20, width=600)
 q3_slider.set(5)
-q3_slider.place(relx=0.32, rely=0.4)
+q3_slider.place(relx=0.5, rely=0.4, anchor="center")
 
 def q3_answers():
 
