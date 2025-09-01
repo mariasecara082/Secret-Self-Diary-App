@@ -1,6 +1,6 @@
-'''This version is the version in which I will be using custom
-tkinter. In this one, I change from my regular tkinter to custom tkinter
-to ensure the code looks neat and nice.'''
+'''This version is the version in which I will be adding a database to the 
+homepagae. This makes saving files and newly made 
+"diary" folders easier. '''
 
 import customtkinter as ctk
 from tkinter import filedialog
@@ -233,7 +233,7 @@ def mainframe():
                                      command=add_diary, border_width=2, width=90, height=90)
     add_diary_button.place(relx=0.32, rely=0.38)
 
-# -------- Main root window --------
+#Main root window.
 init_db()
 
 root = ctk.CTk()

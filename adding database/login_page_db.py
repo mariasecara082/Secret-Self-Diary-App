@@ -8,7 +8,7 @@ import sqlite3
 
 #Initializing database
 def initialize_user_database():
-    conn = sqlite3.connect("users.db")
+    conn = sqlite3.connect("diaries.db")
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -155,7 +155,7 @@ def createnew_popup():
         
         #Saving the new registrated user into the database
         try:
-            conn = sqlite3.connect("users.db")
+            conn = sqlite3.connect("diaries.db")
             cursor = conn.cursor()
             cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (reg_username, reg_password))
             conn.commit()
