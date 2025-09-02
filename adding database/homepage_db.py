@@ -26,6 +26,7 @@ def init_db():
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS diaries (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL,
                         title TEXT NOT NULL,
                         description TEXT,
                         image TEXT
@@ -148,7 +149,7 @@ def update_sidebar():
 
     '''Updating the diaries that can be found on the side
     bar'''
-    
+
     for btn in sidebar_buttons:
         btn.destroy()
     sidebar_buttons.clear()

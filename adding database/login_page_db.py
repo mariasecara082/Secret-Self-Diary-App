@@ -29,7 +29,11 @@ def enter_user_name():
     username = user_name.get().strip() #.strip() is used to remove any trailing whitespaces (spaces, tabs, new lines)
     password = user_password.get().strip()
 
-    # Check for empty fields.
+    cursor.execute("SELECT id, username FROM users WHERE username=? AND password=?", (username, password))
+    user = cursor.fetchone()
+    conn.close()
+
+    #Check for empty fields.
     if not username or not password:
         messagebox.showwarning("Validation Error", "Username and password cannot be empty.")
         return
@@ -46,26 +50,32 @@ def enter_user_name():
         messagebox.showwarning("Validation Error", "Password must include at least one special character (!@#$%^&*()).")
         return
     
+    #Check credentials in the database.
     #Check credentials in the database
     try:
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect("diaries.db")  
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        cursor.execute("SELECT id, username FROM users WHERE username=? AND password=?", (username, password))
         user = cursor.fetchone()
         conn.close()
-
+    
         if not user:
             messagebox.showerror("Login Failed", "Invalid username or password.")
             return
-
-        # Login successful
+    
+        #Login successful
+        user_id = user[0]
+        username = user[1]
         messagebox.showinfo("Success", f"Thank you for logging in, {username}!")
-        root.destroy()
-        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/daily_qs_db.py"
-        subprocess.Popen([sys.executable, script_path])
 
-    except Exception as e:
+        root.destroy()
+        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
+        subprocess.Popen([sys.executable, script_path, str(user_id)])
+
+    except Exception as e: 
         messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
+
+
 
 def createnew_popup():
 
