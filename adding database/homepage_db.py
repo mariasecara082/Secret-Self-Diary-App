@@ -6,7 +6,14 @@ import customtkinter as ctk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import sqlite3
+import sys
 import os
+
+#Read user_id passed from login script
+if len(sys.argv) > 1:
+    current_user_id = int(sys.argv[1])
+else:
+    current_user_id = None  #fallback for testing
 
 #-------------- DATABASE --------------
 db_file = "diaries.db"
@@ -30,10 +37,10 @@ def insert_diary(title, description, image):
 
     '''Insert new diary entry'''
 
-    conn = sqlite3.connect(db_file)
+    conn = sqlite3.connect("diaries.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO diaries (title, description, image) VALUES (?, ?, ?)",
-                   (title, description, image))
+    cursor.execute("INSERT INTO diaries (user_id, title, description, image) VALUES (?, ?, ?, ?)",
+                   (user_id, title, description, image))
     conn.commit()
     conn.close()
 
@@ -126,17 +133,32 @@ def add_diary():
                                   fg_color="palegreen", font=("Verdana", 12))
     submit_button.place(relx=0.42, rely=0.65)
 
+def get_user_diaries(user_id):
+
+    '''Return all diaries belonging to a specific user.'''
+
+    conn = sqlite3.connect("diaries.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, title, cover_image FROM diaries WHERE user_id=?", (user_id,))
+    diaries = cursor.fetchall()
+    conn.close()
+    return diaries
+
 def update_sidebar():
 
-    '''Refresh sidebar with diaries from DB'''
-
+    '''Updating the diaries that can be found on the side
+    bar'''
+    
     for btn in sidebar_buttons:
         btn.destroy()
     sidebar_buttons.clear()
 
-    diaries = get_all_diaries()
+    if current_user_id is None:
+        return  # no user logged in
+
+    diaries = get_user_diaries(current_user_id)  #Filters by logged in users.
     for idx, diary in enumerate(diaries):
-        diary_id, title, _, _ = diary
+        diary_id, title, cover_image = diary
         btn = ctk.CTkButton(root, text=title, font=("Verdana", 10),
                             fg_color="#d8cab6", width=20,
                             command=lambda i=diary_id: open_diary(i))
