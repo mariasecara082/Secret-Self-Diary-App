@@ -201,6 +201,7 @@ ctk.CTkButton(frame_q3, text="Submit",
                                  font=("Arial", 15), fg_color="#bed0d4", 
                                  command=q3_answers, text_color="#614836",
                                  hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
+initialize_database()
 
 
 show_frame(frame_q1)

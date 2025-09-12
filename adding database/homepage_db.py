@@ -35,13 +35,16 @@ def init_db():
     conn.close()
 
 def insert_diary(title, description, image):
-
     '''Insert new diary entry'''
+
+    if current_user_id is None:
+        print("No user logged in. Cannot insert diary.")
+        return
 
     conn = sqlite3.connect("diaries.db")
     cursor = conn.cursor()
     cursor.execute("INSERT INTO diaries (user_id, title, description, image) VALUES (?, ?, ?, ?)",
-                   (user_id, title, description, image))
+                   (current_user_id, title, description, image))
     conn.commit()
     conn.close()
 
@@ -135,12 +138,11 @@ def add_diary():
     submit_button.place(relx=0.42, rely=0.65)
 
 def get_user_diaries(user_id):
-
     '''Return all diaries belonging to a specific user.'''
 
     conn = sqlite3.connect("diaries.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, title, cover_image FROM diaries WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT id, title, image FROM diaries WHERE user_id=?", (user_id,))
     diaries = cursor.fetchall()
     conn.close()
     return diaries
@@ -159,7 +161,7 @@ def update_sidebar():
 
     diaries = get_user_diaries(current_user_id)  #Filters by logged in users.
     for idx, diary in enumerate(diaries):
-        diary_id, title, cover_image = diary
+        diary_id, title, image = diary
         btn = ctk.CTkButton(root, text=title, font=("Verdana", 10),
                             fg_color="#d8cab6", width=20,
                             command=lambda i=diary_id: open_diary(i))

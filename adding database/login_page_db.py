@@ -253,7 +253,7 @@ class LoginApp:
             messagebox.showinfo("Success", f"Thank you for logging in, {username}!")
             self.root.destroy()
 
-            script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
+            script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/daily_qs_db.py"
             subprocess.Popen([sys.executable, script_path, str(user_id)])
 
         except Exception as e:
