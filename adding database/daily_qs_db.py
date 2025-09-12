@@ -13,6 +13,14 @@ from tkinter import HORIZONTAL
 from datetime import datetime
 import sqlite3
 
+# --- Get user_id from command line args ---
+if len(sys.argv) > 1:
+    user_id = sys.argv[1]  #Keep as string, convert to int IF needed.
+    print(f"[DEBUG] Questionnaire received user_id={user_id}")
+else:
+    user_id = None
+    print("[DEBUG] No user_id passed to questionnaire!")
+
 #Initializing database:
 def initialize_database():
     conn = sqlite3.connect("questionnaire.db")
@@ -187,13 +195,19 @@ def q3_answers():
     '''This function is being used to save the question 3
     answers into the database by calling the function
     named save_response_to_db'''
-
     rating = round(q3_slider.get())
     try:
         save_response_to_db(3, f"{rating}/10")
         root.destroy()
-        script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage_db.py"
-        subprocess.Popen([sys.executable, script_path])
+
+        homepage_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/homepage.py"
+        if user_id:
+            print(f"[DEBUG] Launching homepage with user_id={user_id}")
+            subprocess.Popen([sys.executable, homepage_path, str(user_id)])
+        else:
+            print("[DEBUG] No user_id found, launching homepage without user")
+            subprocess.Popen([sys.executable, homepage_path])
+
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong, please try again:\n{e}")
 

@@ -9,11 +9,14 @@ import sqlite3
 import sys
 import os
 
-#Read user_id passed from login script
+#Reads user_id from login script.
 if len(sys.argv) > 1:
     current_user_id = int(sys.argv[1])
 else:
-    current_user_id = None  #fallback for testing
+    current_user_id = None  #Fallback for testing.
+
+
+print(f"[DEBUG] current_user_id at startup = {current_user_id}")
 
 #-------------- DATABASE --------------
 db_file = "diaries.db"
