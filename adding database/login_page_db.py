@@ -6,12 +6,16 @@ import subprocess
 import sys
 import sqlite3
 
+from adding_database.shared_database import init_db, db_file
+
+#Adding a main database
+db_file = "diary_app.db"
 
 class DatabaseManager:
 
     '''Handles all database interactions.'''
 
-    def __init__(self, db_name="diaries.db"):
+    def __init__(self, db_name="diary_app.db"):
 
         '''Initialising database manager with a database name 
         and makes sure the user table exists.'''
@@ -253,7 +257,7 @@ class LoginApp:
             messagebox.showinfo("Success", f"Thank you for logging in, {username}!")
             self.root.destroy()
 
-            script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding database/daily_qs_db.py"
+            script_path = "/Users/maria/Desktop/13DDT/13DDT-PROG-MariaSecara/Secret Self Diary App/adding_database/daily_qs_db.py"
             subprocess.Popen([sys.executable, script_path, str(user_id)])
 
         except Exception as e:
