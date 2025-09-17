@@ -155,11 +155,13 @@ def add_diary():
     image_path_var = ctk.StringVar()
 
     image_button = ctk.CTkButton(new_window, text="Select Cover Image", command=select_image,
-                                 fg_color="#f4c430", font=("Verdana", 12))
-    image_button.place(relx=0.3, rely=0.55)
+                                 fg_color="#7c5b44", text_color="#fffef8",
+                                hover_color="#b59a90", width=210, font=("Verdana", 12))
+    image_button.place(relx=0.42, rely=0.55)
 
     submit_button = ctk.CTkButton(new_window, text="Add Diary", command=submit_diary,
-                                  fg_color="palegreen", font=("Verdana", 12))
+                                  fg_color="#7c5b44", text_color="#fffef8",
+                                hover_color="#b59a90", width=210, font=("Verdana", 12))
     submit_button.place(relx=0.42, rely=0.65)
 
 
@@ -207,6 +209,23 @@ def open_diary(diary_id):
 
     if current_diary_frame:
         current_diary_frame.destroy()
+
+    def go_back():
+        current_diary_frame.destroy()
+        current_diary_frame = None #Resets so the diaries can be clicked again.
+        mainframe()  #Reloads main "My Diaries" frame
+        update_sidebar()
+
+    back_button = ctk.CTkButton(current_diary_frame,
+                                text="← Back",
+                                command=go_back,
+                                fg_color="#7c5b44",
+                                text_color="#fffef8",
+                                hover_color="#b59a90",
+                                width=100,
+                                height=35,
+                                corner_radius=8)
+    back_button.place(relx=0.02, rely=0.02)
 
     current_diary_frame = ctk.CTkFrame(root, fg_color="#fffef8")
     current_diary_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
