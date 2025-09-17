@@ -97,6 +97,7 @@ def get_diary_by_id(diary_id):
 # ---------------- GUI SETUP ----------------
 sidebar_buttons = []
 current_diary_frame = None
+main_frame = None     #Keep track of the main frame to refresh when needed.
 
 def add_diary():
     '''Create a new diary entry window'''
@@ -207,10 +208,15 @@ def open_diary(diary_id):
 
     _, title, description, image_path = diary
 
+    if main_frame:
+        main_frame.destroy()
+
     if current_diary_frame:
         current_diary_frame.destroy()
 
     def go_back():
+        
+        global current_diary_frame
         current_diary_frame.destroy()
         current_diary_frame = None #Resets so the diaries can be clicked again.
         mainframe()  #Reloads main "My Diaries" frame
@@ -280,8 +286,10 @@ def topbar():
         pass
 
 def mainframe():
-
     '''Main frame in the root'''
+    global main_frame
+    if main_frame:  #Destroy if already exists.
+        main_frame.destroy()
 
     main_frame = ctk.CTkFrame(root, fg_color="#fffef8")
     main_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
@@ -302,6 +310,7 @@ def mainframe():
                                      text_color="#bed0d4", hover_color="#dae7e9", border_color="#a89885",
                                      command=add_diary, border_width=2, width=90, height=90)
     add_diary_button.place(relx=0.32, rely=0.38)
+
 
 #Main root window.
 init_db()
