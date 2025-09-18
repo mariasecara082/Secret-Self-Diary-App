@@ -17,11 +17,13 @@ import sqlite3
 db_file = "diary_app.db"
 
 # --- Get user_id from command line args ---
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
     user_id = sys.argv[1]  #Keep as string, convert to int IF needed.
-    print(f"[DEBUG] Questionnaire received user_id={user_id}")
+    username = sys.argv[2]
+    print(f"[DEBUG] Questionnaire received user_id={user_id}, username={username}")
 else:
     user_id = None
+    username = "User"
     print("[DEBUG] No user_id passed to questionnaire!")
 
 #Initializing database:
@@ -85,7 +87,7 @@ def show_frame(frame):
 checkbox_vars = {}
 
 welcome_message = ctk.CTkLabel(frame_q1, 
-                            text="Welcome back, username", 
+                            text="Welcome back, {username}", 
                             font=('Helvetica', 32), fg_color="#fffef8", 
                             text_color="#7c5b44")
 welcome_message.place(relx=0.5, rely=0.15, anchor="center")
@@ -149,7 +151,7 @@ q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
     past, instead of destroying the window and creating a new one,
     this will actually change the frames between each other.'''
 
-ctk.CTkLabel(frame_q2, text="Welcome back, username", 
+ctk.CTkLabel(frame_q2, text="Welcome back, {username}", 
              font=("Biski", 25), 
              fg_color="#fffef8", 
              text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
