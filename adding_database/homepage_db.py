@@ -186,7 +186,7 @@ def update_sidebar():
     sidebar_buttons.clear()
 
     if current_user_id is None:
-        return  # no user logged in
+        return  #No user logged in.
 
     diaries = get_user_diaries(current_user_id)  #Filters by logged in users.
     for idx, diary in enumerate(diaries):
@@ -215,7 +215,7 @@ def open_diary(diary_id):
         current_diary_frame.destroy()
 
     def go_back():
-        
+
         global current_diary_frame
         current_diary_frame.destroy()
         current_diary_frame = None #Resets so the diaries can be clicked again.
@@ -223,7 +223,7 @@ def open_diary(diary_id):
         update_sidebar()
 
     back_button = ctk.CTkButton(current_diary_frame,
-                                text="← Back",
+                                text="Back",
                                 command=go_back,
                                 fg_color="#7c5b44",
                                 text_color="#fffef8",

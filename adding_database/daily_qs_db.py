@@ -17,14 +17,14 @@ import sqlite3
 db_file = "diary_app.db"
 
 # --- Get user_id from command line args ---
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     user_id = sys.argv[1]  #Keep as string, convert to int IF needed.
-    username = sys.argv[2]
-    print(f"[DEBUG] Questionnaire received user_id={user_id}, username={username}")
+    print(f"[DEBUG] Questionnaire received user_id={user_id}")
 else:
     user_id = None
     username = "User"
     print("[DEBUG] No user_id passed to questionnaire!")
+
 
 #Initializing database:
 def initialize_database():
@@ -39,6 +39,21 @@ def initialize_database():
     """)
     conn.commit()
     conn.close() 
+
+def get_username_from_db(user_id):
+
+    '''Fetch the username from the database using user_id.'''
+
+    if not user_id:
+        return "Guest"
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    cursor.execute("SELECT username FROM users WHERE id=?", (user_id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else "Guest"
+
+username = get_username_from_db(user_id)
 
 def save_response_to_db(question_number, response_text):
 
