@@ -86,10 +86,13 @@ checkbox_vars = {}
 
 welcome_message = ctk.CTkLabel(frame_q1, 
                             text="Welcome back, username", 
-                            font=('Helvetica', 32), fg_color="#fffef8", text_color="#7c5b44")
+                            font=('Helvetica', 32), fg_color="#fffef8", 
+                            text_color="#7c5b44")
 welcome_message.place(relx=0.5, rely=0.15, anchor="center")
 
-q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686")
+q1_label = ctk.CTkLabel(frame_q1, text="How are you feeling today?", 
+                        font=("Helvetica", 23, "bold"), fg_color="#fffef8", 
+                        text_color="#898686")
 q1_label.place(relx=0.5, rely=0.25, anchor="center")
 
 progressq1 = ctk.CTkProgressBar(frame_q1, width=400, progress_color="#bed0d4")
@@ -146,13 +149,18 @@ q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
     past, instead of destroying the window and creating a new one,
     this will actually change the frames between each other.'''
 
-ctk.CTkLabel(frame_q2, text="Welcome back, username", font=("Biski", 25), fg_color="#fffef8", text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
+ctk.CTkLabel(frame_q2, text="Welcome back, username", 
+             font=("Biski", 25), 
+             fg_color="#fffef8", 
+             text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
 
 progressq2 = ctk.CTkProgressBar(frame_q2, width=400, progress_color="#bed0d4")
 progressq2.place(relx=0.5, rely=0.05, anchor="center")
 progressq2.set(0.66)
 
-ctk.CTkLabel(frame_q2, text="What was the highlight of your day?", font=("Helvetica", 23, "bold"), fg_color="#fffef8", text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
+ctk.CTkLabel(frame_q2, text="What was the highlight of your day? (60 characters max)", 
+             font=("Helvetica", 23, "bold"), fg_color="#fffef8", 
+             text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
 q2_entry = ctk.CTkEntry(frame_q2, width=400, font=("Arial", 14))
 q2_entry.place(relx=0.5, rely=0.4, anchor="center")
@@ -161,6 +169,9 @@ def q2_answers():
     highlight = q2_entry.get().strip()
     if not highlight:
         messagebox.showwarning("Empty Field", "Please enter your highlight.")
+        return
+    if len(highlight) > 60:
+        messagebox.showwarning("Too Long", "Your answer must be 60 characters or less.")
         return
     try:
         save_response_to_db(2, highlight)
@@ -189,7 +200,9 @@ ctk.CTkLabel(frame_q3, text="Rate your day on a scale from 1-10:",
              text_color="#898686").place(relx=0.5, rely=0.22, anchor="center")
 
 #Showing slider value using a label
-slider_value_label = ctk.CTkLabel(frame_q3, text="5", font=("Helvetica", 20, "bold"), text_color="#7c5b44")
+slider_value_label = ctk.CTkLabel(frame_q3, text="5", 
+                                  font=("Helvetica", 20, "bold"), 
+                                  text_color="#7c5b44")
 slider_value_label.place(relx=0.5, rely=0.48, anchor="center")  # Position under slider
 
 #Update label when slider moves
