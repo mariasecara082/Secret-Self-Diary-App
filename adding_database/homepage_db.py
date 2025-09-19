@@ -167,6 +167,7 @@ def add_diary():
 
 
 def get_user_diaries(user_id):
+
     '''Return all diaries belonging to a specific user.'''
 
     conn = sqlite3.connect(db_file)
@@ -214,6 +215,9 @@ def open_diary(diary_id):
     if current_diary_frame:
         current_diary_frame.destroy()
 
+    current_diary_frame = ctk.CTkFrame(root, fg_color="#fffef8")
+    current_diary_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
+
     def go_back():
 
         global current_diary_frame
@@ -232,9 +236,6 @@ def open_diary(diary_id):
                                 height=35,
                                 corner_radius=8)
     back_button.place(relx=0.02, rely=0.02)
-
-    current_diary_frame = ctk.CTkFrame(root, fg_color="#fffef8")
-    current_diary_frame.place(relx=0.155, rely=0.156, relwidth=0.845, relheight=0.845)
 
     title_label = ctk.CTkLabel(current_diary_frame, text=title, font=("Verdana", 36),
                                fg_color="#fffef8", text_color="#9d7757")
