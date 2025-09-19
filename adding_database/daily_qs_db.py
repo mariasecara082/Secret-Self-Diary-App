@@ -102,7 +102,7 @@ def show_frame(frame):
 checkbox_vars = {}
 
 welcome_message = ctk.CTkLabel(frame_q1, 
-                            text="Welcome back, {username}", 
+                            text=f"Welcome back, {username}", 
                             font=('Helvetica', 32), fg_color="#fffef8", 
                             text_color="#7c5b44")
 welcome_message.place(relx=0.5, rely=0.15, anchor="center")
@@ -166,7 +166,7 @@ q1_submit_button.place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
     past, instead of destroying the window and creating a new one,
     this will actually change the frames between each other.'''
 
-ctk.CTkLabel(frame_q2, text="Welcome back, {username}", 
+ctk.CTkLabel(frame_q2, text=f"Welcome back, {username}", 
              font=("Biski", 25), 
              fg_color="#fffef8", 
              text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
@@ -203,7 +203,7 @@ ctk.CTkButton(frame_q2, text="Next",
                                  hover_color="#dae7e9").place(relx=0.75, rely=0.85, relwidth=0.1, relheight=0.05)
 
 #-------------- QUESTION 3 -------------- The GUI as well as the back ended code.
-ctk.CTkLabel(frame_q3, text="Welcome back, username", 
+ctk.CTkLabel(frame_q3, text=f"Welcome back, {username}", 
              font=("Biski", 25), 
              fg_color="#fffef8", 
              text_color="#7c5b44").place(relx=0.5, rely=0.15, anchor="center")
