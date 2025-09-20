@@ -301,6 +301,15 @@ def mainframe():
                                     text_color="#9d7757")
     my_diaries_label.place(relx=0.08, rely=0.12)
 
+    new_entry_button = ctk.CTkButton(main_frame,
+                                     text="New Entry",
+                                     font=("Verdana", 16),
+                                     fg_color="#7c5b44",
+                                     text_color="#fffef8",
+                                     hover_color="#b59a90",
+                                     command=open_new_entry_window)
+    new_entry_button.place(relx=0.85, rely=0.05)
+
     add_new_diary_frame = ctk.CTkFrame(main_frame,
                                        fg_color="#fffef8",
                                        border_width=2, border_color="#9d7757")
@@ -311,6 +320,100 @@ def mainframe():
                                      text_color="#bed0d4", hover_color="#dae7e9", border_color="#a89885",
                                      command=add_diary, border_width=2, width=90, height=90)
     add_diary_button.place(relx=0.32, rely=0.38)
+    
+#Pop up window to add new diary entry.
+def open_new_entry_window():
+
+    '''Open a pop-up window to create a new diary entry'''
+
+    new_entry_win = ctk.CTkToplevel(root)
+    new_entry_win.title("New Entry")
+    new_entry_win.geometry("900x700")
+    new_entry_win.configure(fg_color="#fffef8")
+
+    #Dropdown to select which diary the entry belongs to.
+    diaries = get_user_diaries(current_user_id)
+    diary_titles = [d[1] for d in diaries] if diaries else ["No Diaries Found"]
+    diary_ids = [d[0] for d in diaries] if diaries else []
+    selected_diary = ctk.StringVar(value=diary_titles[0])
+
+    diary_label = ctk.CTkLabel(new_entry_win, text="Select Diary:",
+                               font=("Verdana", 16),
+                               fg_color="#fffef8",
+                               text_color="#7c5b44")
+    diary_label.place(relx=0.05, rely=0.05)
+
+    diary_dropdown = ctk.CTkOptionMenu(new_entry_win,
+                                       variable=selected_diary,
+                                       values=diary_titles,
+                                       fg_color="#d8cab6",
+                                       text_color="#7c5b44",
+                                       width=250)
+    diary_dropdown.place(relx=0.25, rely=0.05)
+
+    #Large scrollable textbox for writing.
+    text_frame = ctk.CTkFrame(new_entry_win, fg_color="#fffef8", border_width=1, border_color="#a89885")
+    text_frame.place(relx=0.05, rely=0.15, relwidth=0.9, relheight=0.65)
+
+    entry_textbox = ctk.CTkTextbox(text_frame, wrap="word", font=("Verdana", 14))
+    entry_textbox.place(relx=0, rely=0, relwidth=0.95, relheight=1)
+
+    scrollbar = ctk.CTkScrollbar(text_frame, command=entry_textbox.yview)
+    scrollbar.place(relx=0.95, rely=0, relheight=1)
+    entry_textbox.configure(yscrollcommand=scrollbar.set)
+
+    def save_entry():
+        from datetime import datetime
+        if not diary_ids:
+            print("No diaries exist to save this entry.")
+            return
+        diary_index = diary_titles.index(selected_diary.get())
+        diary_id = diary_ids[diary_index]
+        content = entry_textbox.get("1.0", "end-1c").strip()
+        if not content:
+            print("Cannot save empty entry.")
+            return
+
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO diary_entries (diary_id, entry_date, content) VALUES (?, ?, ?)",
+            (diary_id, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), content)
+        )
+        conn.commit()
+        conn.close()
+        print("Entry saved successfully.")
+        new_entry_win.destroy()
+    
+    #Buttons along bottom.
+    def add_link():
+        print("Add link button clicked") #Placeholder function
+
+    def add_photo():
+        print("Add photo button clicked") #Placeholder function
+
+    add_link_button = ctk.CTkButton(new_entry_win, text="Add Link",
+                                    fg_color="#7c5b44", text_color="#fffef8",
+                                    hover_color="#b59a90", command=add_link)
+    add_link_button.place(relx=0.05, rely=0.85)
+
+    add_photo_button = ctk.CTkButton(new_entry_win, text="Add Photo",
+                                     fg_color="#7c5b44", text_color="#fffef8",
+                                     hover_color="#b59a90", command=add_photo)
+    add_photo_button.place(relx=0.18, rely=0.85)
+
+    save_button = ctk.CTkButton(new_entry_win, text="Save Entry",
+                                fg_color="#7c5b44", text_color="#fffef8",
+                                hover_color="#b59a90",
+                                command=save_entry)
+    save_button.place(relx=0.72, rely=0.9)
+
+    #Close button.
+    close_button = ctk.CTkButton(new_entry_win, text="Close Entry",
+                                 fg_color="#a25a5a", text_color="#fffef8",
+                                 hover_color="#c97979",
+                                 command=new_entry_win.destroy)
+    close_button.place(relx=0.85, rely=0.9)
 
 
 #Main root window.
