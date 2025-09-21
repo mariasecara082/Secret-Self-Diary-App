@@ -8,6 +8,8 @@ from PIL import Image, ImageTk
 import sqlite3
 import sys
 import os
+from tkinter import messagebox
+from datetime import datetime
 
 #Adding a main database
 db_file = "diary_app.db"
@@ -93,6 +95,18 @@ def get_diary_by_id(diary_id):
     row = cursor.fetchone()
     conn.close()
     return row
+
+def get_entries_by_diary_id(diary_id):
+    '''Fetch all entries for a specific diary, ordered by date.'''
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT entry_date, content FROM diary_entries WHERE diary_id=? ORDER BY entry_date DESC",
+        (diary_id,)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
 # ---------------- GUI SETUP ----------------
 sidebar_buttons = []
@@ -275,12 +289,12 @@ def topbar():
     topbar_separator.place(relx=0.15, rely=0.15, relwidth=1, relheight=0.006)
 
     try:
-        image1 = "logo.png"
+        image1 = "blue_logo.png"
         image = Image.open(image1)
         image = image.resize((135, 135), Image.Resampling.LANCZOS)
         icon_image = ImageTk.PhotoImage(image)
 
-        icon_label = ctk.CTkLabel(top_bar, image=icon_image)
+        icon_label = ctk.CTkLabel(top_bar, image=icon_image, text="")
         icon_label.image = icon_image
         icon_label.place(relx=0, rely=0, relwidth=0.1, relheight=1)
     except:
@@ -352,7 +366,9 @@ def open_new_entry_window():
     diary_dropdown.place(relx=0.25, rely=0.05)
 
     #Large scrollable textbox for writing.
-    text_frame = ctk.CTkFrame(new_entry_win, fg_color="#fffef8", border_width=1, border_color="#a89885")
+    text_frame = ctk.CTkFrame(new_entry_win, 
+                              fg_color="#fffef8", border_width=1, 
+                              border_color="#a89885")
     text_frame.place(relx=0.05, rely=0.15, relwidth=0.9, relheight=0.65)
 
     entry_textbox = ctk.CTkTextbox(text_frame, wrap="word", font=("Verdana", 14))
@@ -370,9 +386,10 @@ def open_new_entry_window():
         diary_index = diary_titles.index(selected_diary.get())
         diary_id = diary_ids[diary_index]
         content = entry_textbox.get("1.0", "end-1c").strip()
+
         if not content:
-            print("Cannot save empty entry.")
-            return
+            messagebox.showwarning("Empty Entry", "Diary entry cannot be empty before saving.")
+        return
 
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
@@ -385,36 +402,12 @@ def open_new_entry_window():
         print("Entry saved successfully.")
         new_entry_win.destroy()
     
-    #Buttons along bottom.
-    def add_link():
-        print("Add link button clicked") #Placeholder function
-
-    def add_photo():
-        print("Add photo button clicked") #Placeholder function
-
-    add_link_button = ctk.CTkButton(new_entry_win, text="Add Link",
-                                    fg_color="#7c5b44", text_color="#fffef8",
-                                    hover_color="#b59a90", command=add_link)
-    add_link_button.place(relx=0.05, rely=0.85)
-
-    add_photo_button = ctk.CTkButton(new_entry_win, text="Add Photo",
-                                     fg_color="#7c5b44", text_color="#fffef8",
-                                     hover_color="#b59a90", command=add_photo)
-    add_photo_button.place(relx=0.18, rely=0.85)
 
     save_button = ctk.CTkButton(new_entry_win, text="Save Entry",
-                                fg_color="#7c5b44", text_color="#fffef8",
-                                hover_color="#b59a90",
+                                fg_color="#aabfc4", text_color="#fffef8",
+                                hover_color="#c9dbdd",
                                 command=save_entry)
     save_button.place(relx=0.72, rely=0.9)
-
-    #Close button.
-    close_button = ctk.CTkButton(new_entry_win, text="Close Entry",
-                                 fg_color="#a25a5a", text_color="#fffef8",
-                                 hover_color="#c97979",
-                                 command=new_entry_win.destroy)
-    close_button.place(relx=0.85, rely=0.9)
-
 
 #Main root window.
 init_db()
