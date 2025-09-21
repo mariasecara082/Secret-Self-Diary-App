@@ -206,8 +206,9 @@ def update_sidebar():
     diaries = get_user_diaries(current_user_id)  #Filters by logged in users.
     for idx, diary in enumerate(diaries):
         diary_id, title, image = diary
-        btn = ctk.CTkButton(root, text=title, font=("Verdana", 10),
-                            fg_color="#d8cab6", width=20,
+        btn = ctk.CTkButton(root, text=title, font=("Verdana", 14),
+                            fg_color="#7c5b44", width=100,
+                            text_color="#fffef8", hover_color="#b59a90",
                             command=lambda i=diary_id: open_diary(i))
         btn.place(relx=0.01, rely=0.2 + 0.05 * idx)
         sidebar_buttons.append(btn)
@@ -253,22 +254,75 @@ def open_diary(diary_id):
 
     title_label = ctk.CTkLabel(current_diary_frame, text=title, font=("Verdana", 36),
                                fg_color="#fffef8", text_color="#9d7757")
-    title_label.pack(pady=40)
+    title_label.place(relx=0.05, rely=0.1)
 
     if image_path:
         try:
             img = Image.open(image_path)
             img = img.resize((300, 300), Image.Resampling.LANCZOS)
             img = ImageTk.PhotoImage(img)
-            img_label = ctk.CTkLabel(current_diary_frame, image=img, fg_color="#fffef8")
+            img_label = ctk.CTkLabel(current_diary_frame, 
+                                     image=img, 
+                                     text="",
+                                     fg_color="#fffef8")
             img_label.image = img
-            img_label.pack()
+            img_label.place(relx=0.05, rely=0.2)
         except:
             pass
 
     description_label = ctk.CTkLabel(current_diary_frame, text=description,
                                      font=("Verdana", 14), fg_color="#fffef8", wraplength=800)
-    description_label.pack(pady=20)
+    description_label.place(relx=0.4, rely=0.2)
+
+    entries = get_entries_by_diary_id(diary_id)
+
+    if entries:
+        entries_frame = ctk.CTkFrame(current_diary_frame, fg_color="#f9f6f1", corner_radius=8)
+        entries_frame.place(relx=0.05, rely=0.55, relwidth=0.9, relheight=0.4)
+
+        entries_label = ctk.CTkLabel(entries_frame, text="Entries:",
+                                     font=("Verdana", 20, "bold"),
+                                     text_color="#7c5b44")
+        entries_label.place(relx=0.02, rely=0.02)
+
+        #Scrollable container for entries
+        canvas = ctk.CTkCanvas(entries_frame, bg="#f9f6f1", highlightthickness=0)
+        scrollbar = ctk.CTkScrollbar(entries_frame, command=canvas.yview)
+        scrollable_frame = ctk.CTkFrame(canvas, fg_color="#f9f6f1")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.place(relx=0, rely=0.1, relwidth=0.95, relheight=0.85)
+        scrollbar.place(relx=0.95, rely=0.1, relheight=0.85)
+
+        current_y = 0.0
+        for entry_date, content in entries:
+            entry_frame = ctk.CTkFrame(scrollable_frame, fg_color="#fffef8", corner_radius=8)
+            entry_frame.pack(fill="x", pady=5, padx=10)
+
+            date_label = ctk.CTkLabel(entry_frame, text=entry_date,
+                                      font=("Verdana", 10),
+                                      text_color="#9d7757")
+            date_label.pack(anchor="w", padx=10, pady=2)
+
+            content_label = ctk.CTkLabel(entry_frame, text=content,
+                                         font=("Verdana", 14),
+                                         wraplength=700,
+                                         text_color="#4b3b33",
+                                         justify="left")
+            content_label.pack(anchor="w", padx=10, pady=5)
+    else:
+        no_entries_label = ctk.CTkLabel(current_diary_frame,
+                                        text="No entries yet for this diary.",
+                                        font=("Verdana", 14),
+                                        text_color="#9d7757")
+        no_entries_label.place(relx=0.05, rely=0.55)
 
 def sidebar():
 
@@ -389,7 +443,7 @@ def open_new_entry_window():
 
         if not content:
             messagebox.showwarning("Empty Entry", "Diary entry cannot be empty before saving.")
-        return
+            return
 
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
